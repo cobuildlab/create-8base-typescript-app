@@ -1,0 +1,51 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - qa
+      - stage
+      - master
+      
+jobs:
+  CD:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install 8base-cli
+        run: sudo npm i -g 8base-cli@0.0.108
+
+      - name: Login into 8base
+        run: 8base login -t ${{ secrets.MASTER_API_TOKEN }}
+
+      - name: Set branch name
+        id: branch
+        run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+        # If branch is master, configure 8base as usual
+      - name: Configure 8base into Master
+        run: 8base configure --workspaceId ${{ secrets.WORKSPACE_ID }}
+        if: ${{ github.ref == 'refs/heads/master' }}
+        # If branch is not master, create the 8base config file manually
+      - name: Configure 8base into other env
+        if: ${{ github.ref != 'refs/heads/master' }}
+        uses: finnp/create-file-action@master
+        env:
+          FILE_NAME: .workspace.json
+          FILE_DATA: |
+            {
+              "apiHost": "https://api.8base.com",
+              "workspaceId": "${{ secrets.WORKSPACE_ID }}",
+              "environmentName": "${{ steps.branch.outputs.short_ref }}"
+            }
+
+      - name: Deploy cloud functions
+        run: 8base migration commit -f -m FULL
