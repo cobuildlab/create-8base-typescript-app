@@ -45,7 +45,7 @@ export default async (
   ctx;
   return {
     data: {
-      result: `Task recieved: ${event.data.foo}`,
+      result: `Task received: ${event.data.foo}`,
     },
   };
 };

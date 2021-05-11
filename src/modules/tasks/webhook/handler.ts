@@ -44,7 +44,7 @@ export default async (
   return {
     statusCode: 200,
     body: JSON.stringify({
-      result: `Webhook recieved: ${foo}`,
+      result: `Webhook received: ${foo}`,
     }),
   };
 };

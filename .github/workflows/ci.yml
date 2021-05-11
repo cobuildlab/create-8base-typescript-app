@@ -1,7 +1,7 @@
 name: Continuous Integration
 
 # When pull requests are made on the main branch
-on: 
+on:
   pull_request:
     branches:
       - main
@@ -20,19 +20,21 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: npm install
-      - name: Build from Typescript source
-        run: npm run build --if-present
-      - name: Lint
-        run: npm run eslint
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run eslint
+          npm run build --if-present
+          npm run test
+        env:
+          CI: true
       - name: Install 8base-cli
         run: sudo npm i -g 8base-cli@0.0.108
       - name: Login into 8base
