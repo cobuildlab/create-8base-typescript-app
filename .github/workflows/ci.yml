@@ -38,10 +38,10 @@ jobs:
       - name: Install 8base-cli
         run: sudo npm i -g 8base-cli@0.0.108
       - name: Login into 8base
-        run: 8base login -t ${{ secrets.MASTER_API_TOKEN }}
+        run: sudo 8base login -t ${{ secrets.MASTER_API_TOKEN }}
         # If branch name is master, configure 8base as normal
       - name: Configure 8base into Master
-        run: 8base configure --workspaceId ${{ secrets.WORKSPACE_ID }}
+        run: sudo 8base configure --workspaceId ${{ secrets.WORKSPACE_ID }}
         if: ${{ github.base_ref == 'master' }}
         # If not, create the config file manually with the specified branch
       - name: Create .workspace.json file
@@ -60,8 +60,8 @@ jobs:
         run: sudo 8base environment branch -n test_pr_${{ github.event.number }}
       - name: Commit PR migrations
         run: |
-          rm -f package-lock.json
-          8base migration commit --force -m FULL
+          sudo rm -f package-lock.json
+          sudo 8base migration commit --force -m FULL
       - name: Test
         run: npm run test
         env:
