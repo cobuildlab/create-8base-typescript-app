@@ -1,0 +1,26 @@
+{
+  "plugins": ["jsdoc"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "eslint:recommended",
+    "eslint-config-prettier",
+    "plugin:jsdoc/recommended",
+    "plugin:jest/recommended"
+  ],
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "indent": ["error", 2],
+    "semi": [2, "always"],
+    "no-undef": "off",
+    "no-console": ["error", { "allow": ["warn", "error", "log"] }],
+    "jsdoc/require-description-complete-sentence": 1,
+    "jsdoc/require-hyphen-before-param-description": 1
+  },
+  "ignorePatterns": ["migrations/*"]
+}

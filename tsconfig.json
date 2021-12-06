@@ -5,14 +5,8 @@
     "outDir": "./build",
     "lib": ["DOM"],
     "strict": true,
-    "allowJs": true,
+    "allowJs": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/tests/*",
-    "**/*.spec.ts"
-  ]
+  "include": ["src", "test"],
+  "exclude": ["node_modules", "**/tests/*", "**/*.spec.ts"]
 }
